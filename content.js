@@ -87,20 +87,31 @@ class VietnameseShoppingHelper {
                     "Có những cách nào khác để đạt được mục đích mà không cần chi số tiền này?",
                     "Hãy viết ra kế hoạch chi tiết tại sao món này xứng đáng với hơn 1 tháng lương.",
                     "Bạn có sẵn sàng làm thêm giờ 1 tháng để có tiền mua món này không?",
-                    "Nếu bạn đầu tư số tiền này, sau 10 năm nó sẽ trở thành bao nhiêu?",
+                    "Nếu bạn đầu tư số tiền này, sau 10 năm nó sẽ trở thành bao nhiều?",
                     "Đây có phải là quyết định mà bạn sẽ tự hào sau 5 năm nữa?",
                     "Bạn đã cân nhắc tất cả các lựa chọn thay thế chưa?"
                 ]
             }
         };
         
-        // Selectors cho nút mua hàng và thêm vào giỏ - được tối ưu
+        // Updated selectors based on actual website code
         this.buyButtonSelectors = [
+            // Shopee - Updated based on actual code
+            'button.btn.btn-solid-primary',
+            'button.btn.btn-tinted',
+            'button[aria-disabled="false"]:contains("Mua")',
+            'button[aria-disabled="false"]:contains("voucher")',
+            'button[aria-disabled="false"]:contains("giỏ hàng")',
+            'button[aria-disabled="false"]:contains("Add to cart")',
+            'button.YuENex.eFAm_w',
+            'button.YuENex.a_JvBi',
+            
             // Generic patterns cho "Mua ngay"
             'button:contains("Mua ngay")',
             'button:contains("Buy now")',
             'button:contains("MUA NGAY")',
             'button:contains("BUY NOW")',
+            'button:contains("Mua với voucher")',
             'a:contains("Mua ngay")',
             'a:contains("Buy now")',
             '[role="button"]:contains("Mua ngay")',
@@ -111,19 +122,11 @@ class VietnameseShoppingHelper {
             'button:contains("Add to cart")',
             'button:contains("THÊM VÀO GIỎ")',
             'button:contains("ADD TO CART")',
+            'button:contains("thêm vào giỏ hàng")',
             'a:contains("Thêm vào giỏ")',
             'a:contains("Add to cart")',
             '[role="button"]:contains("Thêm vào giỏ")',
             '[role="button"]:contains("Add to cart")',
-            
-            // Shopee
-            'button[class*="btn-solid-primary"]',
-            'button[class*="buy-now"]',
-            'button[class*="shopee-button-solid"]',
-            'button[class*="Ow1BH_"]',
-            'div[role="button"][class*="btn"]',
-            'button[class*="add-to-cart"]',
-            'button[class*="cart-button"]',
             
             // Lazada
             '.add-to-cart-buy-now-btn',
@@ -189,7 +192,7 @@ class VietnameseShoppingHelper {
     }
     
     async init() {
-        console.log('🚀 Vietnamese Shopping Helper v1.3.0 - Khởi động...');
+        console.log('🚀 Vietnamese Shopping Helper v1.3.1 - Khởi động...');
         
         try {
             await this.loadSettings();
@@ -354,7 +357,7 @@ class VietnameseShoppingHelper {
     }
     
     showDisabledButtonMessage() {
-        alert('🛡️ BẢO VỆ TÀI CHÍNH\n\nNút mua hàng đã được vô hiệu hóa để giúp bạn kiểm soát chi tiêu.\n\nNếu bạn thực sự muốn mua sắm, hãy tắt tính năng này trong cài đặt extension.\n\n💡 Mẹo: Hãy dành thời gian suy nghĩ thêm về việc mua sắm này!');
+        alert('🛡️ BẢO VỆ TÀI CHÍNH\n\nNút mua hàng đã được vô hiệu hóa để giúp bạn kiểm soát chi tiêu.\n\nNếu bạn thực sự muốn mua sắm, hãy tắt tính năng này trong cài đặt extension.');
     }
     
     enableAllBuyButtons() {
@@ -600,12 +603,13 @@ class VietnameseShoppingHelper {
     }
     
     extractPriceFromText(text) {
+        // Improved price extraction based on actual patterns
         const cleanText = text.replace(/[^\d.,]/g, '');
         if (!cleanText) return null;
         
         let price = cleanText;
         
-        // Xử lý số có cả dấu phẩy và chấm
+        // Handle different number formats
         if (price.includes(',') && price.includes('.')) {
             const lastComma = price.lastIndexOf(',');
             const lastDot = price.lastIndexOf('.');
@@ -613,13 +617,13 @@ class VietnameseShoppingHelper {
                 price.replace(/\./g, '').replace(',', '.') : 
                 price.replace(/,/g, '');
         } 
-        // Chỉ có dấu phẩy
+        // Only comma
         else if (price.includes(',')) {
             const parts = price.split(',');
             price = parts.length === 2 && parts[1].length <= 2 ? 
                 price.replace(',', '.') : price.replace(/,/g, '');
         } 
-        // Chỉ có dấu chấm
+        // Only dot
         else if (price.includes('.')) {
             const parts = price.split('.');
             if (parts.length > 2 || (parts.length === 2 && parts[1].length > 2)) {
@@ -745,8 +749,9 @@ class VietnameseShoppingHelper {
         if (hostname.includes('shopee.vn')) {
             return [{
                 name: 'Shopee',
-                currentPriceSelector: '.pqTWkA, .IZPeQz, ._1w0TcH, .GCKXwL',
-                excludeSelectors: ['.ZA5sW5', '.mq6YDA', '._1w9jWR'],
+                // Updated selectors based on actual HTML code
+                currentPriceSelector: '.IZPeQz.B67UQ0, .IZPeQz, .pqTWkA, ._1w0TcH, .GCKXwL, div.jRlVo0 > div:first-child',
+                excludeSelectors: ['.ZA5sW5', '.mq6YDA', '._1w9jWR', '.ZA5sW5[style*="margin-left"]'],
                 priceRegex: /₫\s*([\d.,\s]+)/,
                 containerSelector: '.jRlVo0, .flex, .product-briefing'
             }];
@@ -755,8 +760,9 @@ class VietnameseShoppingHelper {
         if (hostname.includes('lazada.vn')) {
             return [{
                 name: 'Lazada',
-                currentPriceSelector: '.pdp-price_color_orange, .origin-price',
-                excludeSelectors: ['.pdp-price_type_deleted', '.old-price'],
+                // Updated based on actual HTML code
+                currentPriceSelector: '.pdp-price.pdp-price_color_orange, .pdp-price_color_orange, .pdp-price.pdp-price_type_normal',
+                excludeSelectors: ['.pdp-price_type_deleted', '.pdp-price_color_lightgray', '.old-price'],
                 priceRegex: /₫\s*([\d.,\s]+)/,
                 containerSelector: '.pdp-product-price'
             }];
@@ -765,7 +771,8 @@ class VietnameseShoppingHelper {
         if (hostname.includes('thegioididong.com') || hostname.includes('dienmayxanh.com')) {
             return [{
                 name: 'TGDD/DMX',
-                currentPriceSelector: '.box-price-present, .price-current, .box-price-new',
+                // Updated based on actual HTML code
+                currentPriceSelector: '.box-price-present, .price-current, .box-price-new, p.box-price-present',
                 excludeSelectors: ['.box-price-old', '.price-old'],
                 priceRegex: /([\d.,\s]+)₫/,
                 containerSelector: '.box-price'
@@ -795,8 +802,9 @@ class VietnameseShoppingHelper {
         if (hostname.includes('fptshop.com.vn')) {
             return [{
                 name: 'FPT Shop',
-                currentPriceSelector: '.text-black-opacity-100, .product-price-current',
-                excludeSelectors: ['.line-through', '.price-old'],
+                // Updated based on actual HTML code
+                currentPriceSelector: '.text-black-opacity-100.h4-bold, span.text-black-opacity-100, .product-price-current',
+                excludeSelectors: ['.line-through', '.price-old', '.text-neutral-gray-5'],
                 priceRegex: /([\d.,\s]+)\s*₫/,
                 containerSelector: '.flex.flex-col'
             }];
@@ -805,8 +813,9 @@ class VietnameseShoppingHelper {
         if (hostname.includes('cellphones.com.vn')) {
             return [{
                 name: 'Cellphones',
-                currentPriceSelector: '.sale-price, .product-price',
-                excludeSelectors: ['.base-price', '.old-price'],
+                // Updated based on actual HTML code
+                currentPriceSelector: '.sale-price, div.sale-price, .product-price',
+                excludeSelectors: ['.base-price', '.old-price', 'del.base-price'],
                 priceRegex: /([\d.,\s]+)đ/,
                 containerSelector: '.is-flex.is-align-items-center'
             }];
@@ -815,17 +824,19 @@ class VietnameseShoppingHelper {
         if (hostname.includes('hasaki.vn')) {
             return [{
                 name: 'Hasaki',
-                currentPriceSelector: '.text-orange, .price-current',
+                // Updated based on actual HTML code
+                currentPriceSelector: '.text-orange.text-lg.font-bold, span.text-orange, .price-current',
                 excludeSelectors: ['.line-through', '.price-old'],
                 priceRegex: /([\d.,\s]+)\s*₫/,
-                containerSelector: '.flex.items-center'
+                containerSelector: '.flex.items-center.gap-2\\.5'
             }];
         }
         
         if (hostname.includes('hoanghamobile.com')) {
             return [{
                 name: 'Hoang Ha Mobile',
-                currentPriceSelector: 'strong.price, .price-current',
+                // Updated based on actual HTML code
+                currentPriceSelector: 'strong.price, .price-current, strong[class="price"]',
                 excludeSelectors: ['.old-price', '.strike'],
                 priceRegex: /([\d.,\s]+)\s*₫/,
                 containerSelector: '.price'
@@ -992,14 +1003,14 @@ class VietnameseShoppingHelper {
             }
         }
         
-        // Xóa tất cả ký tự không phải số, dấu phẩy, chấm và khoảng trắng
+        // Remove all non-numeric characters except comma, dot and whitespace
         const cleanText = text.replace(/[^\d.,\s]/g, '');
         if (!cleanText) return null;
         
-        // Xóa khoảng trắng
+        // Remove whitespace
         let price = cleanText.replace(/\s/g, '');
         
-        // Xử lý định dạng số
+        // Handle number formats
         if (price.includes(',') && price.includes('.')) {
             const lastComma = price.lastIndexOf(',');
             const lastDot = price.lastIndexOf('.');
@@ -1054,7 +1065,7 @@ class VietnameseShoppingHelper {
         } catch (error) {
             console.warn('❌ Lỗi khi thêm time display:', error);
             try {
-                element.appendChild(timeDisplay);
+                element.parentElement.appendChild(timeDisplay);
             } catch (e) {
                 console.warn('❌ Không thể thêm time display:', e);
             }
@@ -1090,6 +1101,7 @@ class VietnameseShoppingHelper {
         const hostname = window.location.hostname.toLowerCase();
         
         if (hostname.includes('shopee.vn')) {
+            // Optimized for Shopee's structure
             const container = element.closest('.jRlVo0') || 
                             element.closest('.flex') || 
                             element.parentElement;
@@ -1262,7 +1274,7 @@ class VietnameseShoppingHelper {
 }
 
 // Khởi động extension với error handling
-console.log('🔌 Vietnamese Shopping Helper v1.3.0 - Content Script loaded');
+console.log('🔌 Vietnamese Shopping Helper v1.3.1 - Content Script loaded');
 
 if (!window.vnShoppingHelperInitialized) {
     window.vnShoppingHelperInitialized = true;
