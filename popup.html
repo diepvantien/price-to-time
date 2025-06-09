@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Giá Theo Thời Gian</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <span class="logo-icon">⏰</span>
+                <div class="logo-text">
+                    <h1>Tính Giá Theo Thời Gian</h1>
+                    <p>Biến giá thành thời gian làm việc</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <label for="salaryInput">
+                    <span class="label-icon">💰</span>
+                    <span class="label-text">Mức lương của bạn</span>
+                </label>
+                <div class="input-group">
+                    <input type="number" id="salaryInput" placeholder="8,000,000" min="0">
+                    <select id="salaryUnit">
+                        <option value="hour">VNĐ/giờ</option>
+                        <option value="day">VNĐ/ngày</option>
+                        <option value="month" selected>VNĐ/tháng</option>
+                        <option value="year">VNĐ/năm</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section">
+                <label for="taxType">
+                    <span class="label-icon">📊</span>
+                    <span class="label-text">Loại thu nhập</span>
+                </label>
+                <div class="select-wrapper">
+                    <select id="taxType">
+                        <option value="before">Lương trước thuế (Gross)</option>
+                        <option value="after" selected>Lương sau thuế (Net)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section">
+                <label for="displayUnit">
+                    <span class="label-icon">📅</span>
+                    <span class="label-text">Hiển thị thời gian theo</span>
+                </label>
+                <div class="select-wrapper">
+                    <select id="displayUnit">
+                        <option value="auto" selected>Tự động (thông minh)</option>
+                        <option value="hours">Chỉ hiển thị giờ</option>
+                        <option value="days">Chỉ hiển thị ngày</option>
+                        <option value="months">Chỉ hiển thị tháng</option>
+                        <option value="years">Chỉ hiển thị năm</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="toggle-section">
+                    <div class="toggle-info">
+                        <span class="label-icon">🔄</span>
+                        <div class="toggle-text">
+                            <span class="label-text">Bật extension</span>
+                            <p class="helper-text">Tự động chuyển đổi giá thành thời gian</p>
+                        </div>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" id="enableExtension" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <button id="saveSettings" class="save-btn">
+                <span class="btn-icon">💾</span>
+                <span class="btn-text">Lưu cài đặt</span>
+            </button>
+            
+            <div class="preview-section">
+                <h3>Ví dụ:</h3>
+                <div class="preview-item">
+                    <span class="original-price">499,000₫</span>
+                    <span class="time-display" id="previewTime">⏰ 12h 30p</span>
+                </div>
+                <div class="preview-item">
+                    <span class="original-price">2,500,000₫</span>
+                    <span class="time-display" id="previewTime2">⏰ 3 ngày</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="info-item">
+                <span class="info-icon">🔒</span>
+                <span class="info-text">100% riêng tư - Dữ liệu chỉ lưu trên máy bạn</span>
+            </div>
+            <div class="info-item">
+                <span class="info-icon">🛍️</span>
+                <span class="info-text">Shopee, Lazada, Tiki, TGDD, FPT Shop, Cellphones...</span>
+            </div>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>

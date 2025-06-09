@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "Tính Giá Theo Thời Gian - Vietnamese Shopping Helper",
+  "version": "1.2.0",
+  "description": "Chuyển đổi giá sản phẩm thành thời gian làm việc tương ứng trên các trang thương mại điện tử Việt Nam",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.shopee.vn/*",
+    "*://*.lazada.vn/*",
+    "*://*.tiki.vn/*",
+    "*://*.sendo.vn/*",
+    "*://*.thegioididong.com/*",
+    "*://*.fptshop.com.vn/*",
+    "*://*.dienmayxanh.com/*",
+    "*://*.bachhoaxanh.com/*",
+    "*://*.hasaki.vn/*",
+    "*://*.fahasa.com/*",
+    "*://*.cellphones.com.vn/*",
+    "*://*.nguyenkim.com/*",
+    "*://*.hoanghamobile.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.shopee.vn/*",
+        "*://*.lazada.vn/*",
+        "*://*.tiki.vn/*",
+        "*://*.sendo.vn/*",
+        "*://*.thegioididong.com/*",
+        "*://*.fptshop.com.vn/*",
+        "*://*.dienmayxanh.com/*",
+        "*://*.bachhoaxanh.com/*",
+        "*://*.hasaki.vn/*",
+        "*://*.fahasa.com/*",
+        "*://*.cellphones.com.vn/*",
+        "*://*.nguyenkim.com/*",
+        "*://*.hoanghamobile.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Tính Giá Theo Thời Gian"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
