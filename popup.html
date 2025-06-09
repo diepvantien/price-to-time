@@ -13,10 +13,12 @@
     <div class="container">
         <div class="header">
             <div class="logo">
-                <span class="logo-icon">⏰</span>
+                <div class="logo-icon-wrapper">
+                    <span class="logo-icon">⏰</span>
+                </div>
                 <div class="logo-text">
                     <h1>Tính Giá Theo Thời Gian</h1>
-                    <p>Biến giá thành thời gian làm việc</p>
+                    <p>Mua sắm có ý thức, tiết kiệm thông minh</p>
                 </div>
             </div>
         </div>
@@ -28,7 +30,7 @@
                     <span class="label-text">Mức lương của bạn</span>
                 </label>
                 <div class="input-group">
-                    <input type="number" id="salaryInput" placeholder="8,000,000" min="0">
+                    <input type="text" id="salaryInput" placeholder="8 000 000" class="formatted-input">
                     <select id="salaryUnit">
                         <option value="hour">VNĐ/giờ</option>
                         <option value="day">VNĐ/ngày</option>
@@ -83,6 +85,22 @@
                 </div>
             </div>
 
+            <div class="section">
+                <div class="toggle-section">
+                    <div class="toggle-info">
+                        <span class="label-icon">🛡️</span>
+                        <div class="toggle-text">
+                            <span class="label-text">Vô hiệu hóa nút mua hàng</span>
+                            <p class="helper-text">Tắt hoàn toàn nút "Mua ngay" và "Thêm vào giỏ"</p>
+                        </div>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" id="disableBuyButtons">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
             <button id="saveSettings" class="save-btn">
                 <span class="btn-icon">💾</span>
                 <span class="btn-text">Lưu cài đặt</span>
@@ -91,12 +109,12 @@
             <div class="preview-section">
                 <h3>Ví dụ:</h3>
                 <div class="preview-item">
-                    <span class="original-price">499,000₫</span>
-                    <span class="time-display" id="previewTime">⏰ 12h 30p</span>
+                    <span class="original-price">499 000₫</span>
+                    <span class="time-display preview-time" id="previewTime">⏰ 12h 30p</span>
                 </div>
                 <div class="preview-item">
-                    <span class="original-price">2,500,000₫</span>
-                    <span class="time-display" id="previewTime2">⏰ 3 ngày</span>
+                    <span class="original-price">2 500 000₫</span>
+                    <span class="time-display preview-time" id="previewTime2">⏰ 3 ngày</span>
                 </div>
             </div>
         </div>
@@ -109,6 +127,9 @@
             <div class="info-item">
                 <span class="info-icon">🛍️</span>
                 <span class="info-text">Shopee, Lazada, Tiki, TGDD, FPT Shop, Cellphones...</span>
+            </div>
+            <div class="copyright">
+                <span class="copyright-text">© 2025 Diep Van Tien. All rights reserved.</span>
             </div>
         </div>
     </div>

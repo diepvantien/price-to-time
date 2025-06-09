@@ -5,7 +5,8 @@ class PopupManager {
             salaryUnit: 'month',
             taxType: 'after',
             displayUnit: 'auto',
-            enabled: true
+            enabled: true,
+            disableBuyButtons: false
         };
         
         this.init();
@@ -14,36 +15,9 @@ class PopupManager {
     async init() {
         await this.loadSettings();
         this.setupEventListeners();
+        this.updateUI();
         this.updatePreview();
-    }
-    
-    setupEventListeners() {
-        // Lưu cài đặt
-        document.getElementById('saveSettings').addEventListener('click', () => this.saveSettings());
-        
-        // Toggle extension
-        document.getElementById('enableExtension').addEventListener('change', (e) => {
-            this.toggleExtension(e.target.checked);
-        });
-        
-        // Update preview khi thay đổi settings
-        ['salaryInput', 'salaryUnit', 'taxType', 'displayUnit'].forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.addEventListener('change', () => this.updatePreview());
-                element.addEventListener('input', () => this.updatePreview());
-            }
-        });
-        
-        // Format số khi nhập lương
-        const salaryInput = document.getElementById('salaryInput');
-        salaryInput.addEventListener('input', (e) => {
-            const value = e.target.value.replace(/[^\d]/g, '');
-            if (value) {
-                const formatted = new Intl.NumberFormat('vi-VN').format(value);
-                e.target.setAttribute('data-formatted', formatted);
-            }
-        });
+        console.log('🎨 Popup đã khởi động');
     }
     
     async loadSettings() {
@@ -53,110 +27,117 @@ class PopupManager {
                 salaryUnit: 'month',
                 taxType: 'after',
                 displayUnit: 'auto',
-                enabled: true
+                enabled: true,
+                disableBuyButtons: false
             });
-            
             this.settings = result;
-            
-            // Cập nhật UI
-            document.getElementById('salaryInput').value = result.salary;
-            document.getElementById('salaryUnit').value = result.salaryUnit;
-            document.getElementById('taxType').value = result.taxType;
-            document.getElementById('displayUnit').value = result.displayUnit;
-            document.getElementById('enableExtension').checked = result.enabled;
-            
+            console.log('📋 Đã tải cài đặt popup:', this.settings);
         } catch (error) {
-            console.error('Lỗi khi tải cài đặt:', error);
-            this.showNotification('Lỗi khi tải cài đặt', 'error');
+            console.error('❌ Lỗi khi tải cài đặt popup:', error);
         }
     }
     
-    async saveSettings() {
-        const salary = parseFloat(document.getElementById('salaryInput').value) || 8000000;
-        const salaryUnit = document.getElementById('salaryUnit').value;
-        const taxType = document.getElementById('taxType').value;
-        const displayUnit = document.getElementById('displayUnit').value;
-        const enabled = document.getElementById('enableExtension').checked;
-        
-        this.settings = { salary, salaryUnit, taxType, displayUnit, enabled };
-        
-        try {
-            await chrome.storage.sync.set(this.settings);
-            
-            // Gửi tin nhắn tới content script
-            const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
-            if (tab && tab.id) {
-                try {
-                    await chrome.tabs.sendMessage(tab.id, {
-                        action: 'updateSettings',
-                        settings: this.settings
-                    });
-                } catch (tabError) {
-                    console.log('Content script chưa sẵn sàng:', tabError.message);
-                }
-            }
-            
-            this.showNotification('Cài đặt đã được lưu!', 'success');
+    setupEventListeners() {
+        // Format số cho input lương
+        const salaryInput = document.getElementById('salaryInput');
+        salaryInput.addEventListener('input', (e) => {
+            this.formatSalaryInput(e.target);
             this.updatePreview();
-            
-        } catch (error) {
-            console.error('Lỗi khi lưu cài đặt:', error);
-            this.showNotification('Lỗi khi lưu cài đặt', 'error');
-        }
+        });
+        
+        // Ngăn nhập ký tự không phải số
+        salaryInput.addEventListener('keypress', (e) => {
+            if (!/[\d\s]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+        
+        // Các sự kiện thay đổi cài đặt
+        document.getElementById('salaryUnit').addEventListener('change', () => this.updatePreview());
+        document.getElementById('taxType').addEventListener('change', () => this.updatePreview());
+        document.getElementById('displayUnit').addEventListener('change', () => this.updatePreview());
+        
+        // Lưu cài đặt
+        document.getElementById('saveSettings').addEventListener('click', () => {
+            this.saveSettings();
+        });
+        
+        // Enter để lưu
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.saveSettings();
+            }
+        });
     }
     
-    async toggleExtension(enabled) {
-        this.settings.enabled = enabled;
+    formatSalaryInput(input) {
+        // Lấy vị trí con trỏ
+        const cursorPosition = input.selectionStart;
+        const oldValue = input.value;
         
-        try {
-            await chrome.storage.sync.set({enabled});
-            
-            const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
-            if (tab && tab.id) {
-                try {
-                    await chrome.tabs.sendMessage(tab.id, {
-                        action: 'toggleExtension',
-                        enabled
-                    });
-                } catch (tabError) {
-                    console.log('Content script chưa sẵn sàng:', tabError.message);
-                }
-            }
-            
-            this.showNotification(
-                enabled ? 'Extension đã được bật' : 'Extension đã được tắt',
-                'info'
-            );
-        } catch (error) {
-            console.error('Lỗi khi toggle extension:', error);
+        // Xóa tất cả ký tự không phải số
+        let value = input.value.replace(/[^\d]/g, '');
+        
+        // Thêm khoảng trắng mỗi 3 chữ số từ phải qua trái
+        if (value) {
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
         }
+        
+        // Cập nhật giá trị
+        input.value = value;
+        
+        // Điều chỉnh vị trí con trỏ
+        const spacesAdded = value.split(' ').length - oldValue.replace(/[^\d]/g, '').split(' ').length;
+        const newPosition = Math.max(0, cursorPosition + spacesAdded);
+        
+        // Đặt lại vị trí con trỏ (setTimeout để đảm bảo DOM đã cập nhật)
+        setTimeout(() => {
+            input.setSelectionRange(newPosition, newPosition);
+        }, 0);
+    }
+    
+    updateUI() {
+        // Cập nhật các trường input từ settings
+        const salaryInput = document.getElementById('salaryInput');
+        salaryInput.value = this.formatNumber(this.settings.salary);
+        
+        document.getElementById('salaryUnit').value = this.settings.salaryUnit;
+        document.getElementById('taxType').value = this.settings.taxType;
+        document.getElementById('displayUnit').value = this.settings.displayUnit;
+        document.getElementById('enableExtension').checked = this.settings.enabled;
+        document.getElementById('disableBuyButtons').checked = this.settings.disableBuyButtons;
+    }
+    
+    formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    }
+    
+    parseFormattedNumber(str) {
+        return parseInt(str.replace(/\s/g, '')) || 0;
     }
     
     updatePreview() {
-        const salary = parseFloat(document.getElementById('salaryInput').value) || this.settings.salary;
+        const salaryInput = document.getElementById('salaryInput');
+        const salary = this.parseFormattedNumber(salaryInput.value) || this.settings.salary;
         const salaryUnit = document.getElementById('salaryUnit').value;
         const taxType = document.getElementById('taxType').value;
         const displayUnit = document.getElementById('displayUnit').value;
         
-        // Preview 1: 499,000
-        const samplePrice1 = 499000;
-        const timeWorked1 = this.calculateTimeWorked(samplePrice1, salary, salaryUnit, taxType, displayUnit);
+        // Tính toán ví dụ
+        const preview1Price = 499000;
+        const preview2Price = 2500000;
         
-        // Preview 2: 2,500,000
-        const samplePrice2 = 2500000;
-        const timeWorked2 = this.calculateTimeWorked(samplePrice2, salary, salaryUnit, taxType, displayUnit);
+        const time1 = this.calculateWorkTime(preview1Price, salary, salaryUnit, taxType, displayUnit);
+        const time2 = this.calculateWorkTime(preview2Price, salary, salaryUnit, taxType, displayUnit);
         
-        const previewElement1 = document.getElementById('previewTime');
-        const previewElement2 = document.getElementById('previewTime2');
-        
-        if (previewElement1) previewElement1.textContent = `⏰ ${timeWorked1}`;
-        if (previewElement2) previewElement2.textContent = `⏰ ${timeWorked2}`;
+        document.getElementById('previewTime').textContent = `⏰ ${time1}`;
+        document.getElementById('previewTime2').textContent = `⏰ ${time2}`;
     }
     
-    calculateTimeWorked(price, salary, salaryUnit, taxType, displayUnit) {
+    calculateWorkTime(price, salary, salaryUnit, taxType, displayUnit) {
+        // Tính lương theo giờ
         let hourlyRate = salary;
         
-        // Chuyển đổi về hourly rate
         switch (salaryUnit) {
             case 'year':
                 hourlyRate = salary / (12 * 22 * 8);
@@ -172,24 +153,23 @@ class PopupManager {
                 break;
         }
         
-        // Điều chỉnh thuế
+        // Áp dụng thuế
         if (taxType === 'before') {
             hourlyRate = hourlyRate * 0.85;
         }
         
         const hoursNeeded = price / hourlyRate;
         
-        // Format theo displayUnit
         return this.formatTimeDisplay(hoursNeeded, displayUnit);
     }
     
     formatTimeDisplay(hoursNeeded, displayUnit) {
         if (displayUnit === 'hours') {
             if (hoursNeeded < 1) {
-                return `${Math.round(hoursNeeded * 60)} phút`;
+                return `${Math.round(hoursNeeded * 60)}p`;
             }
             const hours = Math.round(hoursNeeded * 10) / 10;
-            return `${hours} giờ`;
+            return `${hours}h`;
         }
         
         if (displayUnit === 'days') {
@@ -207,55 +187,89 @@ class PopupManager {
             return `${years} năm`;
         }
         
-        // Auto mode - thông minh
+        // Auto mode
         if (hoursNeeded < 1) {
-            return `${Math.round(hoursNeeded * 60)} phút`;
+            return `${Math.round(hoursNeeded * 60)}p`;
         } else if (hoursNeeded < 8) {
             const hours = Math.floor(hoursNeeded);
             const minutes = Math.round((hoursNeeded - hours) * 60);
-            return minutes > 0 ? `${hours}h ${minutes}p` : `${hours} giờ`;
+            return minutes > 0 ? `${hours}h${minutes}p` : `${hours}h`;
         } else if (hoursNeeded < 176) {
             const days = Math.floor(hoursNeeded / 8);
             const remainingHours = Math.round(hoursNeeded % 8);
-            return remainingHours > 0 ? `${days} ngày ${remainingHours}h` : `${days} ngày`;
+            return remainingHours > 0 ? `${days}d${remainingHours}h` : `${days}d`;
         } else {
             const months = Math.floor(hoursNeeded / 176);
             const remainingDays = Math.round((hoursNeeded % 176) / 8);
-            return remainingDays > 0 ? `${months} tháng ${remainingDays} ngày` : `${months} tháng`;
+            return remainingDays > 0 ? `${months}th${remainingDays}d` : `${months}th`;
         }
     }
     
-    showNotification(message, type = 'info') {
-        const btn = document.getElementById('saveSettings');
-        const originalContent = btn.innerHTML;
+    async saveSettings() {
+        const salaryInput = document.getElementById('salaryInput');
+        const saveBtn = document.getElementById('saveSettings');
         
-        let icon, color;
-        switch (type) {
-            case 'success':
-                icon = '✅';
-                color = '#10b981';
-                break;
-            case 'error':
-                icon = '❌';
-                color = '#ef4444';
-                break;
-            default:
-                icon = 'ℹ️';
-                color = '#3b82f6';
+        // Lấy giá trị từ form
+        const newSettings = {
+            salary: this.parseFormattedNumber(salaryInput.value) || 8000000,
+            salaryUnit: document.getElementById('salaryUnit').value,
+            taxType: document.getElementById('taxType').value,
+            displayUnit: document.getElementById('displayUnit').value,
+            enabled: document.getElementById('enableExtension').checked,
+            disableBuyButtons: document.getElementById('disableBuyButtons').checked
+        };
+        
+        try {
+            // Hiệu ứng loading
+            saveBtn.innerHTML = '<span class="btn-icon">⏳</span><span class="btn-text">Đang lưu...</span>';
+            saveBtn.disabled = true;
+            
+            // Lưu vào storage
+            await chrome.storage.sync.set(newSettings);
+            this.settings = newSettings;
+            
+            // Gửi tin nhắn cập nhật đến content script
+            const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+            if (tab) {
+                try {
+                    await chrome.tabs.sendMessage(tab.id, {
+                        action: 'updateSettings',
+                        settings: newSettings
+                    });
+                } catch (error) {
+                    console.log('Không thể gửi tin nhắn đến content script (có thể tab không phù hợp)');
+                }
+            }
+            
+            // Hiệu ứng thành công
+            saveBtn.innerHTML = '<span class="btn-icon">✅</span><span class="btn-text">Đã lưu!</span>';
+            saveBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+            
+            setTimeout(() => {
+                saveBtn.innerHTML = '<span class="btn-icon">💾</span><span class="btn-text">Lưu cài đặt</span>';
+                saveBtn.disabled = false;
+                saveBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+            }, 2000);
+            
+            console.log('✅ Đã lưu cài đặt:', newSettings);
+            
+        } catch (error) {
+            console.error('❌ Lỗi khi lưu cài đặt:', error);
+            
+            // Hiệu ứng lỗi
+            saveBtn.innerHTML = '<span class="btn-icon">❌</span><span class="btn-text">Lỗi!</span>';
+            saveBtn.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+            
+            setTimeout(() => {
+                saveBtn.innerHTML = '<span class="btn-icon">💾</span><span class="btn-text">Lưu cài đặt</span>';
+                saveBtn.disabled = false;
+                saveBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+            }, 2000);
         }
-        
-        btn.innerHTML = `${icon} ${message}`;
-        btn.style.background = color;
-        btn.disabled = true;
-        
-        setTimeout(() => {
-            btn.innerHTML = originalContent;
-            btn.style.background = '';
-            btn.disabled = false;
-        }, 2000);
     }
 }
 
+// Khởi động popup manager
 document.addEventListener('DOMContentLoaded', () => {
     new PopupManager();
 });
