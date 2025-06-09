@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Tính Giá Theo Thời Gian - Vietnamese Shopping Helper",
-  "version": "1.3.0",
-  "description": "Chuyển đổi giá sản phẩm thành thời gian làm việc tương ứng trên các trang thương mại điện tử Việt Nam với tính năng mua sắm có ý thức",
+  "version": "1.5.0",
+  "description": "Chuyển đổi giá sản phẩm thành thời gian làm việc tương ứng trên các trang thương mại điện tử Việt Nam với tính năng mua sắm có ý thức và cảnh báo thông minh",
   "permissions": [
     "storage",
     "activeTab",
@@ -47,7 +47,7 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Tính Giá Theo Thời Gian"
+    "default_title": "Tính Giá Theo Thời Gian - Mua sắm có ý thức"
   },
   "icons": {
     "16": "icons/icon16.png",

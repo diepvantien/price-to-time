@@ -1,10 +1,10 @@
-/* Vietnamese Shopping Helper Styles v1.3.0 - Optimized */
+/* Vietnamese Shopping Helper Styles v1.5.0 - Complete Edition */
 
 .vn-price-time-container {
     margin: 4px 0;
     position: relative;
     display: inline-block;
-    width: 100%;
+    width: auto;
 }
 
 .vn-price-time {
@@ -23,6 +23,7 @@
     position: relative;
     overflow: hidden;
     max-width: fit-content;
+    cursor: pointer;
 }
 
 /* Animated gradient background */
@@ -149,7 +150,6 @@
 /* Hover effects */
 .vn-price-time:hover {
     transform: translateY(-2px) scale(1.03);
-    cursor: pointer;
 }
 
 .vn-level-1:hover { box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4); }
@@ -158,49 +158,236 @@
 .vn-level-4:hover { box-shadow: 0 4px 30px rgba(239, 68, 68, 0.7); }
 .vn-level-5:hover { box-shadow: 0 4px 35px rgba(220, 38, 38, 0.9); }
 
-/* Tooltip styles */
+/* Tooltip styles - Vị trí phía trên lệch phải, luôn hiển thị khi hover */
 .vn-tooltip {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-8px);
+    position: fixed;
     background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
     color: white;
-    padding: 12px 16px;
-    border-radius: 12px;
-    font-size: 13px;
-    line-height: 1.4;
-    max-width: 280px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    padding: 16px 20px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    max-width: 350px;
+    min-width: 280px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 10px 20px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
-    z-index: 1000;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 999999;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
     
-    /* Limit to 2 lines max */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* Đảm bảo text hiển thị đầy đủ */
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-overflow: unset;
+    display: block;
+    overflow: visible;
 }
 
-.vn-tooltip::after {
+.vn-tooltip::before {
     content: '';
     position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 6px solid transparent;
+    bottom: -8px;
+    left: 30px;
+    border: 8px solid transparent;
     border-top-color: #374151;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .vn-tooltip.show {
     opacity: 1;
     visibility: visible;
-    transform: translateX(-50%) translateY(-12px);
+    transform: translateY(-4px) scale(1);
+}
+
+/* Tooltip cho từng level với tone nóng tăng dần */
+.vn-level-1 .vn-tooltip {
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    border-color: rgba(34, 197, 94, 0.3);
+    box-shadow: 
+        0 20px 40px rgba(34, 197, 94, 0.3),
+        0 10px 20px rgba(34, 197, 94, 0.2);
+}
+
+.vn-level-1 .vn-tooltip::before {
+    border-top-color: #16a34a;
+}
+
+.vn-level-2 .vn-tooltip {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    border-color: rgba(245, 158, 11, 0.3);
+    box-shadow: 
+        0 20px 40px rgba(245, 158, 11, 0.4),
+        0 10px 20px rgba(245, 158, 11, 0.3);
+}
+
+.vn-level-2 .vn-tooltip::before {
+    border-top-color: #d97706;
+}
+
+.vn-level-3 .vn-tooltip {
+    background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+    border-color: rgba(249, 115, 22, 0.4);
+    box-shadow: 
+        0 20px 40px rgba(249, 115, 22, 0.5),
+        0 10px 20px rgba(249, 115, 22, 0.4);
+    animation: warningTooltipGlow 2s ease-in-out infinite alternate;
+}
+
+.vn-level-3 .vn-tooltip::before {
+    border-top-color: #ea580c;
+}
+
+@keyframes warningTooltipGlow {
+    from { 
+        box-shadow: 
+            0 20px 40px rgba(249, 115, 22, 0.5),
+            0 10px 20px rgba(249, 115, 22, 0.4);
+    }
+    to { 
+        box-shadow: 
+            0 25px 50px rgba(249, 115, 22, 0.7),
+            0 15px 25px rgba(249, 115, 22, 0.5);
+    }
+}
+
+.vn-level-4 .vn-tooltip {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    border-color: rgba(239, 68, 68, 0.4);
+    box-shadow: 
+        0 20px 40px rgba(239, 68, 68, 0.6),
+        0 10px 20px rgba(239, 68, 68, 0.5);
+    animation: dangerTooltipGlow 1.5s ease-in-out infinite alternate;
+}
+
+.vn-level-4 .vn-tooltip::before {
+    border-top-color: #dc2626;
+}
+
+@keyframes dangerTooltipGlow {
+    from { 
+        box-shadow: 
+            0 20px 40px rgba(239, 68, 68, 0.6),
+            0 10px 20px rgba(239, 68, 68, 0.5);
+    }
+    to { 
+        box-shadow: 
+            0 30px 60px rgba(239, 68, 68, 0.8),
+            0 15px 30px rgba(239, 68, 68, 0.6);
+    }
+}
+
+.vn-level-5 .vn-tooltip {
+    background: linear-gradient(135deg, #b91c1c 0%, #991b1b 25%, #7f1d1d 50%, #450a0a 100%);
+    border-color: rgba(248, 113, 113, 0.5);
+    box-shadow: 
+        0 25px 50px rgba(220, 38, 38, 0.8),
+        0 15px 30px rgba(220, 38, 38, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: criticalTooltipGlow 1s ease-in-out infinite alternate;
+}
+
+.vn-level-5 .vn-tooltip::before {
+    border-top-color: #b91c1c;
+}
+
+@keyframes criticalTooltipGlow {
+    from { 
+        box-shadow: 
+            0 25px 50px rgba(220, 38, 38, 0.8),
+            0 15px 30px rgba(220, 38, 38, 0.7);
+        transform: translateY(-4px) scale(1);
+    }
+    to { 
+        box-shadow: 
+            0 35px 70px rgba(220, 38, 38, 1),
+            0 20px 40px rgba(220, 38, 38, 0.8);
+        transform: translateY(-4px) scale(1.02);
+    }
+}
+
+/* Funny message styles cho nút mua hàng */
+.vn-funny-message {
+    position: absolute !important;
+    top: -8px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: white !important;
+    padding: 4px 8px !important;
+    border-radius: 12px !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    z-index: 1000 !important;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(10px) !important;
+    max-width: 200px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.2 !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    animation: funnyMessageFadeIn 0.5s ease-out !important;
+}
+
+.vn-funny-message:hover {
+    transform: translateX(-50%) scale(1.05) !important;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.6) !important;
+}
+
+@keyframes funnyMessageFadeIn {
+    0% { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(0.8); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+@keyframes funnyMessageFadeOut {
+    0% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(0.8); }
+}
+
+/* Modal Styles cho Mindful Shopping */
+.vn-mindful-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(10px) !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+@keyframes modalFadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes modalSlideIn {
+    0% { transform: translateY(-30px) scale(0.95); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.vn-btn-cancel:hover {
+    background: #f3f4f6 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.vn-btn-continue:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+    filter: brightness(110%) !important;
 }
 
 /* Responsive design */
@@ -220,42 +407,33 @@
     }
     
     .vn-tooltip {
-        max-width: 240px;
-        font-size: 12px;
-        padding: 10px 14px;
+        max-width: 90vw !important;
+        min-width: 250px !important;
+        font-size: 13px !important;
+        padding: 14px 18px !important;
+        /* Positioning cho mobile */
+        left: 50% !important;
+        transform: translateX(-50%) translateY(-4px) !important;
     }
-}
-
-/* Disabled button protection overlay */
-.vn-disabled-overlay {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-    color: white;
-    padding: 20px 30px;
-    border-radius: 16px;
-    font-size: 16px;
-    font-weight: 600;
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    z-index: 10000;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(20px);
-    animation: popup-appear 0.3s ease-out;
-    max-width: 90%;
-    line-height: 1.4;
-}
-
-@keyframes popup-appear {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.8);
+    
+    .vn-tooltip::before {
+        left: 50% !important;
+        transform: translateX(-50%) !important;
     }
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
+    
+    .vn-funny-message {
+        font-size: 9px !important;
+        padding: 3px 6px !important;
+        max-width: 150px !important;
+    }
+    
+    .vn-mindful-modal {
+        padding: 20px !important;
+    }
+    
+    .vn-mindful-modal > div {
+        width: 95% !important;
+        max-height: 90vh !important;
     }
 }
 
@@ -275,7 +453,46 @@
 /* Print styles */
 @media print {
     .vn-price-time-container,
-    .vn-tooltip {
+    .vn-tooltip,
+    .vn-funny-message,
+    .vn-mindful-modal {
         display: none !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .vn-tooltip {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .vn-tooltip::before {
+        border-top-color: #1e293b;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .vn-price-time {
+        border: 3px solid currentColor;
+    }
+    
+    .vn-tooltip {
+        border: 3px solid white;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .vn-price-time,
+    .vn-tooltip,
+    .vn-funny-message {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    .vn-price-time::before {
+        animation: none !important;
     }
 }
