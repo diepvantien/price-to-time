@@ -24,42 +24,87 @@
         </div>
         
         <div class="content">
-            <div class="section">
+            <!-- COMPACT: Ngôn ngữ trên 1 dòng -->
+            <div class="section compact-section">
+                <label for="language">
+                    <span class="label-icon">🌍</span>
+                    <span class="label-text">Ngôn ngữ</span>
+                </label>
+                <div class="compact-control">
+                    <select id="language">
+                        <option value="vi">🇻🇳 Tiếng Việt</option>
+                        <option value="en">🇺🇸 English</option>
+                        <option value="zh">🇨🇳 中文</option>
+                        <option value="ko">🇰🇷 한국어</option>
+                        <option value="ja">🇯🇵 日本語</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- COMPACT: Tiền tệ trên 1 dòng -->
+            <div class="section compact-section">
+                <label for="currency">
+                    <span class="label-icon">💱</span>
+                    <span class="label-text">Tiền tệ</span>
+                </label>
+                <div class="compact-control">
+                    <select id="currency">
+                        <!-- Options sẽ được tạo động bởi JavaScript -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- COMPACT: Lương trên 1 dòng -->
+            <div class="section compact-section">
                 <label for="salaryInput">
                     <span class="label-icon">💰</span>
-                    <span class="label-text">Mức lương của bạn</span>
+                    <span class="label-text">Lương</span>
                 </label>
-                <div class="input-group">
-                    <input type="text" id="salaryInput" placeholder="8 000 000" class="formatted-input">
-                    <select id="salaryUnit">
-                        <option value="hour">VNĐ/giờ</option>
-                        <option value="day">VNĐ/ngày</option>
-                        <option value="month" selected>VNĐ/tháng</option>
-                        <option value="year">VNĐ/năm</option>
+                <div class="compact-control">
+                    <input type="text" id="salaryInput" placeholder="Nhập mức lương" class="compact-input">
+                    <select id="salaryUnit" class="compact-select">
+                        <option value="hour">₫/giờ</option>
+                        <option value="day">₫/ngày</option>
+                        <option value="month" selected>₫/tháng</option>
+                        <option value="year">₫/năm</option>
                     </select>
                 </div>
             </div>
 
-            <div class="section">
-                <label for="taxType">
-                    <span class="label-icon">📊</span>
-                    <span class="label-text">Loại thu nhập</span>
+            <!-- COMPACT: Thời gian làm việc với chú thích rõ ràng -->
+            <div class="section compact-section">
+                <label for="workTime">
+                    <span class="label-icon">⏰</span>
+                    <span class="label-text">Thời gian làm việc</span>
                 </label>
-                <div class="select-wrapper">
-                    <select id="taxType">
-                        <option value="before">Lương trước thuế (Gross)</option>
-                        <option value="after" selected>Lương sau thuế (Net)</option>
+                <div class="compact-control">
+                    <input type="number" id="hoursPerDay" value="8" min="1" max="24" class="compact-input" placeholder="Giờ/ngày">
+                    <input type="number" id="daysPerMonth" value="30" min="1" max="31" class="compact-input" placeholder="Ngày/tháng">
+                </div>
+            </div>
+
+            <!-- COMPACT: Chế độ hiển thị trên 1 dòng -->
+            <div class="section compact-section">
+                <label for="displayMode">
+                    <span class="label-icon">🎭</span>
+                    <span class="label-text">Chế độ hiển thị</span>
+                </label>
+                <div class="compact-control">
+                    <select id="displayMode" class="full-width-select">
+                        <option value="priceAndTime" selected>Giá và thời gian</option>
+                        <option value="timeOnly">Chỉ thời gian</option>
                     </select>
                 </div>
             </div>
 
-            <div class="section">
+            <!-- COMPACT: Hiển thị thời gian theo trên 1 dòng -->
+            <div class="section compact-section">
                 <label for="displayUnit">
-                    <span class="label-icon">📅</span>
-                    <span class="label-text">Hiển thị thời gian theo</span>
+                    <span class="label-icon">📊</span>
+                    <span class="label-text">Hiển thị thời gian</span>
                 </label>
-                <div class="select-wrapper">
-                    <select id="displayUnit">
+                <div class="compact-control">
+                    <select id="displayUnit" class="full-width-select">
                         <option value="auto" selected>Tự động (thông minh)</option>
                         <option value="hours">Chỉ hiển thị giờ</option>
                         <option value="days">Chỉ hiển thị ngày</option>
@@ -105,18 +150,6 @@
                 <span class="btn-icon">💾</span>
                 <span class="btn-text">Lưu cài đặt</span>
             </button>
-            
-            <div class="preview-section">
-                <h3>Ví dụ:</h3>
-                <div class="preview-item">
-                    <span class="original-price">499 000₫</span>
-                    <span class="time-display preview-time" id="previewTime">⏰ 12h 30p</span>
-                </div>
-                <div class="preview-item">
-                    <span class="original-price">2 500 000₫</span>
-                    <span class="time-display preview-time" id="previewTime2">⏰ 3 ngày</span>
-                </div>
-            </div>
         </div>
         
         <div class="footer">
@@ -126,7 +159,15 @@
             </div>
             <div class="info-item">
                 <span class="info-icon">🛍️</span>
-                <span class="info-text">Shopee, Lazada, Tiki, TGDD, FPT Shop, Cellphones...</span>
+                <span class="info-text">Hỗ trợ các trang thương mại điện tử lớn trên thế giới</span>
+            </div>
+            <div class="info-item">
+                <span class="info-icon">💝</span>
+                <span class="info-text">
+                    Donate: 
+                    <a href="https://me.momo.vn/OeIGiJsViJfDfntmiRId" target="_blank" style="color: #d63384; text-decoration: none; font-weight: 600;">Momo</a> | 
+                    <a href="https://coff.ee/tixuno" target="_blank" style="color: #8b4513; text-decoration: none; font-weight: 600;">Buymeacoffee</a>
+                </span>
             </div>
             <div class="copyright">
                 <span class="copyright-text">© 2025 Diep Van Tien. All rights reserved.</span>

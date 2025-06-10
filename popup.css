@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    width: 380px;
+    width: 400px;
     min-height: 600px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #2d3748;
@@ -60,12 +60,111 @@ body {
 
 .content {
     padding: 24px 20px 16px;
+    max-height: 600px;
+    overflow-y: auto;
 }
 
 .section {
     margin-bottom: 20px;
 }
 
+/* COMPACT SECTION STYLES */
+.compact-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.compact-section label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0;
+    font-weight: 500;
+    color: #374151;
+    flex: 0 0 auto;
+    min-width: 120px;
+}
+
+.compact-control {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+}
+
+.compact-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background: #f9fafb;
+    min-width: 0;
+}
+
+.compact-input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.compact-select {
+    padding: 10px 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    background: #f9fafb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 8px center;
+    background-repeat: no-repeat;
+    background-size: 14px;
+    padding-right: 32px;
+    min-width: 80px;
+}
+
+.compact-select:focus {
+    outline: none;
+    border-color: #4f46e5;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.full-width-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    background: #f9fafb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+.full-width-select:focus {
+    outline: none;
+    border-color: #4f46e5;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* ORIGINAL STYLES FOR NON-COMPACT SECTIONS */
 .section label {
     display: flex;
     align-items: center;
@@ -88,7 +187,12 @@ body {
     gap: 8px;
 }
 
-.formatted-input {
+.input-wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.formatted-input, .number-input {
     flex: 1;
     padding: 12px 14px;
     border: 2px solid #e5e7eb;
@@ -97,9 +201,15 @@ body {
     font-weight: 500;
     transition: all 0.2s ease;
     background: #f9fafb;
+    width: 100%;
 }
 
-.formatted-input:focus {
+.number-input {
+    text-align: center;
+    font-weight: 600;
+}
+
+.formatted-input:focus, .number-input:focus {
     outline: none;
     border-color: #4f46e5;
     background: #ffffff;
@@ -136,7 +246,7 @@ select:focus {
 }
 
 .input-group select {
-    flex: 0 0 120px;
+    flex: 0 0 140px;
 }
 
 .toggle-section {
@@ -231,6 +341,7 @@ input:checked + .slider:before {
     justify-content: center;
     gap: 8px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
 }
 
 .save-btn:hover {
@@ -244,48 +355,6 @@ input:checked + .slider:before {
 
 .btn-icon {
     font-size: 16px;
-}
-
-.preview-section {
-    margin-top: 20px;
-    padding: 16px;
-    background: linear-gradient(135deg, #fef7ff 0%, #faf5ff 100%);
-    border-radius: 12px;
-    border: 1px solid #e9d5ff;
-}
-
-.preview-section h3 {
-    font-size: 14px;
-    font-weight: 600;
-    color: #7c3aed;
-    margin-bottom: 12px;
-}
-
-.preview-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    padding: 8px 0;
-}
-
-.preview-item:last-child {
-    margin-bottom: 0;
-}
-
-.original-price {
-    font-size: 14px;
-    font-weight: 500;
-    color: #374151;
-}
-
-.preview-time {
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 500;
 }
 
 .footer {
@@ -303,8 +372,8 @@ input:checked + .slider:before {
     color: #64748b;
 }
 
-.info-item:last-child {
-    margin-bottom: 0;
+.info-item:last-of-type {
+    margin-bottom: 12px;
 }
 
 .info-icon {
@@ -312,7 +381,6 @@ input:checked + .slider:before {
 }
 
 .copyright {
-    margin-top: 12px;
     padding-top: 12px;
     border-top: 1px solid #e2e8f0;
     text-align: center;
@@ -322,6 +390,24 @@ input:checked + .slider:before {
     font-size: 11px;
     color: #94a3b8;
     font-weight: 400;
+}
+
+/* Scroll bar styling */
+.content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.content::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
 }
 
 /* Animations */
@@ -341,9 +427,9 @@ input:checked + .slider:before {
 }
 
 /* Responsive */
-@media (max-width: 400px) {
+@media (max-width: 420px) {
     body {
-        width: 360px;
+        width: 380px;
     }
     
     .container {
@@ -352,5 +438,20 @@ input:checked + .slider:before {
     
     .content {
         padding: 20px 16px;
+        max-height: 500px;
+    }
+    
+    .compact-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .compact-section label {
+        min-width: auto;
+    }
+    
+    .compact-control {
+        width: 100%;
     }
 }
